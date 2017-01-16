@@ -14,3 +14,6 @@
 
 Route::get('/','MainController@index');
 Route::get('/main','MainController@main');
+
+Route::get('/category/{id}','CategoryController@index');
+Route::get('/product/{id}','ProductController@index');

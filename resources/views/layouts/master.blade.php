@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Online_shop</title>
 
+    <!--List menu-->
+    <link rel="stylesheet" href="/css/style1.css">
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -26,30 +29,107 @@
 
 
 
-
 </head>
 <body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
 
-<nav class="navbar navbar-fixed-top navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div><!-- /.nav-collapse -->
-    </div><!-- /.container -->
-</nav><!-- /.navbar -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a tabindex="-1" class="navbar-brand" href="/main">ONLINE_SHOP</a>
+
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+
+            @foreach($menu as $category)
+                @if($category->title=='Акция')
+            <li><a  href="/category/{{$category->id}}" style="color: red">{{$category->title}}</a> </li>
+                @endif
+            @endforeach
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-haspopup="true" aria-expanded="false">Категории <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+
+                    @foreach($menu as $category)
+
+                        @if($category->parent_id==0)
+
+                        <li class="menu-item dropdown dropdown-submenu"><a tabindex="-1"
+
+                                                                           href="/category/{{$category->id}}">{{$category->title}}</a>
+                            <ul class="dropdown-menu">
+                            @foreach($menu as $category2)
+
+                                @if($category->id==$category2->parent_id)
+
+                                <li class="menu-item "><a href="/category/{{$category2->id}}"> {{$category2->title}}</a></li>
+
+                                @endif
+
+                                @endforeach
+                                    </ul>
+                        </li>
+                        @endif
+                    @endforeach
+                </ul>
+            </li>
+
+            @if (($user = Auth::user()) && $user->moderator)
+                <li><a href="/admin"   style="color:blue">Admin panel</a></li>
+            @endif
+        </ul>
+
+
+
+        <form class="navbar-form navbar-left" method="get">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-info">Поиск</button>
+        </form>
+
+
+
+        <ul class="nav navbar-nav navbar-right" style="margin-right: 40px">
+            <!-- Authentication Links -->
+            @if (Auth::guest())
+                <li><a href="{{ url('/login') }}">Войти</a></li>
+                <li><a href="{{ url('/register') }}">Регистрация</a></li>
+            @else
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ url('/logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                Выйти
+                            </a>
+
+                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+        </ul>
+
+    </div>
+
+</nav>
+
+<!--/.nav-collapse -->
 
 <div class="container">
 
@@ -60,22 +140,17 @@
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-            <div class="jumbotron">
-                <h1>Hello, world!</h1>
-                <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+            <div class="jumbotron" style="background: black; text-align: center">
+            <img src="/img/logo.png" >
             </div>
 
+         </div>
 
-        @yield('content')
 
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
-                <a href="#" class="list-group-item active">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item active">ТОП 5 ТОВАРА</a>
                 <a href="#" class="list-group-item">Link</a>
                 <a href="#" class="list-group-item">Link</a>
                 <a href="#" class="list-group-item">Link</a>
@@ -83,7 +158,24 @@
                 <a href="#" class="list-group-item">Link</a>
             </div>
         </div><!--/.sidebar-offcanvas-->
+
+
+
+
+        @yield('content')
+
+
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas">
+
+        </div><!--/.sidebar-offcanvas-->
+
+
     </div><!--/row-->
+
+
+
+
 
     <hr>
 
