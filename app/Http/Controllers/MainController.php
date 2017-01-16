@@ -11,16 +11,7 @@ use Illuminate\Http\Request;
 class MainController extends Controller
 {
 
-    public function index(){
-        
-        $categories = Category::all();
-
-        //$products = Product::where('sale',1)->get();
-        
-
-        return view('main', ['categories' => $categories]);
-    }
-    
+   
     public function main(){
 
         //Slider

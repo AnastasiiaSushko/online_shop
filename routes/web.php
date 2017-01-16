@@ -11,9 +11,12 @@
 |
 */
 
-
-Route::get('/','MainController@index');
+Route::get('/','MainController@main');
 Route::get('/main','MainController@main');
 
 Route::get('/category/{id}','CategoryController@index');
 Route::get('/product/{id}','ProductController@index');
+Auth::routes();
+
+
+Route::post('/product/{id}', 'CommentController@add_comment');
