@@ -28,7 +28,7 @@
 
 
 </head>
-<body>
+<body style="background-color: @if($background_color){{$background_color->value}}@else white @endif">
 <nav class="navbar navbar-inverse navbar-fixed-top">
 
     <div class="navbar-header">
@@ -82,15 +82,22 @@
             @if (($user = Auth::user()) && $user->moderator)
                 <li><a href="/admin"   style="color:blue">Admin panel</a></li>
             @endif
+
+                @if (($user = Auth::user()))
+                    <li><a href="/user/{{$user->id}}">Личный кабинет</a></li>
+                @endif
+               <li><a href="/cart"><img src="http://www.inmotionhosting.com/support/images/stories/icons/ecommerce/empty-cart-light.png" style="height: 30px"></a></li>
         </ul>
 
 
-
-        <form class="navbar-form navbar-left" method="get">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-info">Поиск</button>
+        <form action="/search" class="navbar-form navbar-left">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="Искать...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+            </div><!-- /input-group -->
         </form>
 
 
@@ -149,13 +156,17 @@
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
                 <a href="#" class="list-group-item active">ТОП 5 ТОВАРА</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
+                @foreach($top as $top1)
+                    <a href="/product/{{$top1->id}}" class="list-group-item">{{$top1->title}} <img src="{{$top1->main_photo}}" style="height: 60px;"></a>
+                @endforeach
             </div>
         </div><!--/.sidebar-offcanvas-->
+
+
+
+
+
+
 
 
 
@@ -174,7 +185,6 @@
 
 
 
-
     <hr>
 
     <footer>
@@ -186,13 +196,37 @@
 
 
 
+<!-- Modal subscribe -->
+
+<div id="parent_popup">
+    <div id="popup">
+    <span style="font:24px Monotype Corsiva, Arial;
+	      color: #008000;
+	      text-align: left;
+	      text-shadow: 0 1px 3px rgba(0,0,0,.3);">Оформить подписку...</span><br><br/>
+        <form action="" method="post">
+            <input type="text" name="name" id="name" placeholder="Your name"><br><br>
+            <input type="text" name="email" id="email" placeholder="Your email"><br><br>
+        </form>
+        <p style="text-align: center; font-size:18px;"><strong><a href="#">Подписаться »</a></strong></p>
+        <a class="close" title="Закрыть" onclick="document.getElementById('parent_popup').style.display='none';">X</a>
+    </div>
+</div>
+
+
+<script>
+
+    window.onbeforeunload = function(){return confirm('Покинуть страницу?')};
+    var delay_popup = 15000;
+    setTimeout("document.getElementById('parent_popup').style.display='block'", delay_popup);
+
+</script>
 
 
 
 
 
-
-
+<script src="/js/functions.js"></script>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

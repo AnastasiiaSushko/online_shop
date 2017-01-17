@@ -2,18 +2,12 @@
 
 @section('content')
 
-
-
-
-
-<!--<div style="clear: both">-->
-
     <div class="col-xs-12 col-sm-9">
     @foreach($categories as $category)
         @if($category->parent_id==0)
-
-                    <h1 style="text-align: center"><a href="/category/{{$category->id}}" style="color: #2ab27b">{{$category->title}}</a> </h1><br>
-
+                <div style="border: 2px solid black; clear: both; background:#122b40;" >
+                    <h1 style="text-align: center"><a href="/category/{{$category->id}}" style="color: white">{{$category->title}}</a> </h1><br>
+                </div>
                     @else
             <h2><a href="/category/{{$category->id}}">{{$category->title}}</a></h2><br>
             <div class="row">
@@ -37,11 +31,7 @@
                             <p><a class="btn btn-default" href="/product/{{ $product['id']}}" role="button">View details &raquo;</a></p>
                         </div><!--/.col-xs-6.col-lg-4-->
 
-
                     @endif
-
-
-
                 @endforeach
             </div>
             @endif
@@ -125,11 +115,6 @@
 
 
 <!-- /.carousel  <div class="col-md-6"></div> -->
-
-
-
-
-
 
 @endsection
 

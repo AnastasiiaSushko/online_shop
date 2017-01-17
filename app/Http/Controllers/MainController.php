@@ -29,4 +29,21 @@ class MainController extends Controller
 
         return view('main1', ['sliders'=>$sliders, 'categories'=>$categories],compact('data'));
     }
+
+
+
+    public function search(Request $request)
+    {
+        if ($q = $request->input('q')) {
+            $products = Product::where('content', 'like', "%$q%")
+                ->orWhere('title', 'like', "%$q%")
+                ->paginate(5)
+                ->appends(['q' => $q])
+            ;
+            if ($products->count()) {
+                return view('products', ['products' => $products]);
+            }
+        }
+        return view('error', ['q' => $q]);
+    }
 }

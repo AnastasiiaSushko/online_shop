@@ -15,6 +15,8 @@ class Product extends Model
         return $this->categories()->get();
     }
 
+    
+    
     public function comments(){
         
         return $this->hasMany('App\Comment');
